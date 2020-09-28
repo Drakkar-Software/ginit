@@ -1,1 +1,1 @@
-# init-generator
+# ginit
