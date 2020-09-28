@@ -9,19 +9,30 @@
 #  copies of the Software, and to permit persons to whom the Software is
 #  furnished to do so.
 
+import ginit
+import ginit.visitor as visitor
+import ginit.generation as generation
+import ginit.patching as patching
+
+
 def main():
     import argparse
     import logging
 
-    parser = argparse.ArgumentParser(description='Ginit')
+    parser = argparse.ArgumentParser(description=ginit.__project__)
     parser.add_argument('path', nargs='?', help='path to generate __init__.py and __init__.pxd', default='.')
 
     parser.add_argument('-i', '--inplace', action='store_false',
                         help='modify / write to the file inplace',
                         default=True)
 
-    parser.add_argument('-c', '--cython', action='store_false',
-                        help='Enable cython __init__ generation')
+    parser.add_argument('-c', '--cython', action='store_true',
+                        help='Enable cython __init__ generation',
+                        default=False)
+
+    parser.add_argument('-p', '--patch', action='store_true',
+                        help='Patch imports of python files at path',
+                        default=False)
 
     parser.add_argument('--verbose', nargs='?', default=0, type=int,
                         help='Verbosity level')
@@ -42,6 +53,16 @@ def main():
         format='%(levelname)s: %(message)s',
         level=level,
     )
+
+    visit_result = visitor.visit_path(args.path,
+                                      visit_cython=args.cython)
+    if args.patch:
+        patching.patch_imports_form(module_visitor_dict=visit_result,
+                                    is_cython_path=args.cython)
+    else:
+        generation.gen_python_init_from_visit(module_visitor_dict=visit_result,
+                                              in_place=args.inplace,
+                                              is_cython_init=args.cython)
 
 
 if __name__ == '__main__':

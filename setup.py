@@ -14,7 +14,6 @@ from setuptools import find_packages, setup
 
 PACKAGES = find_packages(exclude=["tests"])
 
-
 # long description from README file
 # with open('README.md', encoding='utf-8') as f:
 #     DESCRIPTION = f.read()
@@ -36,6 +35,11 @@ setup(
     tests_require=["pytest"],
     test_suite="tests",
     zip_safe=False,
+    entry_points={
+        'console_scripts': [
+            'ginit = ginit.__main__:main'
+        ]
+    },
     data_files=[],
     setup_requires=REQUIRED,
     install_requires=REQUIRED,
