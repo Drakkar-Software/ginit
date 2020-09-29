@@ -57,14 +57,14 @@ def _patch_module_import_from(module: ginit.ModuleVisitor,
         for from_import in module.imports_from
     ]
     for line in fileinput.input([module.path_with_parent], inplace=True):
-        if is_line_from_candidate(line, from_imports=from_imports, import_str=import_str):
+        if _is_line_from_candidate(line, from_imports=from_imports, import_str=import_str):
             import_search = re.search(rf"from\s(.*){import_str}", line)
             if import_search:
                 line = get_patched_import(import_search.group(1), import_str)
         sys.stdout.write(line)
 
 
-def is_line_from_candidate(line: str, from_imports: list, import_str: str) -> bool:
+def _is_line_from_candidate(line: str, from_imports: list, import_str: str) -> bool:
     """
     Check if line has from import
     :param line: the line to check
@@ -87,5 +87,5 @@ def get_patched_import(import_package: str, import_str: str) -> str:
     :return: the patched from import package
     """
     package_names = import_package.split('.')
-    imported_modules = f" as {import_package.split('.')[-1]}" if len(package_names) > 1 else ""
+    imported_modules = f"as {import_package.split('.')[-1]}" if len(package_names) > 1 else ""
     return f"{import_str} {import_package}{imported_modules}"

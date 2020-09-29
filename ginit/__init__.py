@@ -18,8 +18,8 @@ from ginit.module import (ModuleVisitor)
 from ginit import visitor
 from ginit.visitor import (visit_path)
 
-__project__ = "Ginit"
-__version__ = "1.0.0"
+__project__ = "ginit"
+__version__ = "1.1.0"
 
 FILE_TO_IGNORE = ['__init__', '__main__']
 PATCHER_FILES_TO_IGNORE = ['__init__.py', '__init__.pxd']

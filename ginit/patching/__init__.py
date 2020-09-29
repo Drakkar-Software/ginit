@@ -10,7 +10,9 @@
 #  furnished to do so.
 
 from ginit.patching import imports_patcher
+from ginit.patching.imports_patcher import (patch_imports_form, get_patched_import)
 
-from ginit.patching.imports_patcher import (patch_imports_form)
+from ginit.patching import imports_regex_patcher
+from ginit.patching.imports_regex_patcher import (imports_regex_patcher)
 
-__all__ = ['patch_imports_form']
+__all__ = ['patch_imports_form', 'get_patched_import', 'imports_regex_patcher']

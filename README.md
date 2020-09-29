@@ -1,10 +1,10 @@
-# Ginit
+# ginit
 
 Ginit is a python / cython init files generator.
 
 ## Installation
 ```bash
-pip3 install Ginit
+pip3 install ginit
 ```
 
 ## Usage

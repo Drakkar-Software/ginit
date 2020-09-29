@@ -10,7 +10,7 @@
 #  furnished to do so.
 import os
 import logging
-from black import format_str, Mode
+import black
 
 import ginit
 
@@ -58,10 +58,23 @@ def gen_python_init(init_path: str,
     :param use_black_formatting: when True, format init str using black
     """
     global_from_str, detailed_from_str, all_imports_list_str = gen_python_init_str(module_visitor_list)
+
+    def _apply_black_formatting(raw_string):
+        """
+        Apply black formatting on a raw string
+        :param raw_string: the raw string
+        :return: the raw string black formatted or an empty string
+        """
+        try:
+            return f"{black.format_str(raw_string, mode=black.Mode())}{os.linesep}"
+        except black.InvalidInput as invalid_input:
+            logging.getLogger("InitGenerator").warning(f"Fail to apply black formating : {invalid_input}")
+        return ""
+
     init_file_content = f"{os.linesep}" \
-                        f"{format_str(global_from_str, mode=Mode())}" \
-                        f"{format_str(detailed_from_str, mode=Mode())}" \
-                        f"{format_str(all_imports_list_str, mode=Mode())}" \
+                        f"{_apply_black_formatting(global_from_str)}" \
+                        f"{_apply_black_formatting(detailed_from_str)}" \
+                        f"{_apply_black_formatting(all_imports_list_str)}" \
         if use_black_formatting else os.linesep + global_from_str + detailed_from_str + all_imports_list_str
 
     if is_cython_init:  # prevent black to raise an InvalidInput with cimport

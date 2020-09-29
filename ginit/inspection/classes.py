@@ -22,12 +22,13 @@ def parse_classes(code: Union[ast.Module, ast.AST]) -> list:
     return [node for node in ast.walk(code) if isinstance(node, ast.ClassDef)]
 
 
-def parse_class_methods(ast_class: Union[ast.Module, ast.AST]) -> list:
+def parse_class_methods(ast_class: Union[ast.Module, ast.AST], with_async=True) -> list:
     """
     :param ast_class: the AST parsed class
+    :param with_async: When True, include async methods
     :return: the list of class methods
     """
-    return inspection.parse_functions(ast_class)
+    return inspection.parse_functions(ast_class, with_async=with_async)
 
 
 def parse_class_constants(ast_class: Union[ast.Module, ast.AST]) -> list:

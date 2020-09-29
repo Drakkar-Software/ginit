@@ -32,17 +32,20 @@ class ModuleVisitor:
         """
         self.classes = inspection.parse_classes(inspection.get_code(self.path_with_parent))
 
-    def set_module_functions(self) -> None:
+    def set_module_functions(self, with_async=True) -> None:
         """
         Set the result of the subtraction of class methods and global methods
         with found class methods = method for clazz in classes for method in inspection.parse_class_methods(clazz)
         and with all module methods = inspection.parse_functions(inspection.get_code(file_path)))
+        :param with_async: When True, include async methods
         """
         self.functions = [function
-                          for function in inspection.parse_functions(inspection.get_code(self.path_with_parent))
+                          for function in inspection.parse_functions(inspection.get_code(self.path_with_parent),
+                                                                     with_async=with_async)
                           if function.name not in [method.name
                                                    for clazz in self.classes
-                                                   for method in inspection.parse_class_methods(clazz)]]
+                                                   for method in inspection.parse_class_methods(clazz,
+                                                                                                with_async=with_async)]]
 
     def set_module_constants(self) -> None:
         """

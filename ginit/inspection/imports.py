@@ -17,15 +17,6 @@ def parse_imports(code) -> list:
     :return: code imports list
     """
     return [node for node in ast.walk(code) if isinstance(node, ast.Import)]
-    # imports = set()
-    # tree = ast.parse(code)
-    # for node in ast.walk(tree):
-    #     if isinstance(node, ast.Import):
-    #         for sub_node in node.names:
-    #             imports.add(sub_node.name)
-    #     if isinstance(node, ast.ImportFrom):
-    #         imports.add(('.' * node.level) + node.module)
-    # return list(imports)
 
 
 def parse_imports_from(code) -> list:

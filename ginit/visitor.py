@@ -28,7 +28,7 @@ def visit_path(path: str, visit_cython: bool = False) -> dict:
                                       current_path.split(os.path.sep),
                                       visit_files(parent_path=current_path,
                                                   files=filenames,
-                                                  visit_cython=visit_cython))
+                                                  is_visiting_cython=visit_cython))
     return visited_modules_by_path
 
 
@@ -54,31 +54,37 @@ def _set_dict_value_from_keys(dictionary: dict, keys: list, value: object) -> ob
     return _set_dict_value_from_keys(current_dictionary, keys, value)
 
 
-def visit_files(parent_path: str, files: list, visit_cython: bool = False) -> list:
+def visit_files(parent_path: str, files: list, is_visiting_cython: bool = False) -> list:
     """
     Visit of files of directory
     :param parent_path: the current directory
     :param files: directory files list
-    :param visit_cython: When True, ignore python module and take cython modules
+    :param is_visiting_cython: When True, ignore python module and take cython modules
     :return: the list of visited modules as ModuleVisitor instances
     """
     visited_modules = []
     for file in files:
-        if file and os.path.splitext(file)[-1] in ginit.CYTHON_EXTS if visit_cython else ginit.PYTHON_EXTS:
-            visited_modules.append(visit_module(parent_path, file))
+        if file and os.path.splitext(file)[-1] in ginit.PYTHON_EXTS:
+            visited_modules.append(visit_module(parent_path, file,
+                                                is_visiting_cython=is_visiting_cython))
     return visited_modules
 
 
-def visit_module(parent_path: str, file_path: str) -> ginit.ModuleVisitor:
+def visit_module(parent_path: str, file_path: str, is_visiting_cython: bool = False) -> ginit.ModuleVisitor:
     """
     Visit a python module
     :param parent_path: the module directory
     :param file_path: the module path
+    :param is_visiting_cython: When True, ignore python module and take cython modules
     :return: the module visitor instance for the file_path
     """
     module = ginit.ModuleVisitor(parent_path, file_path)
-    module.set_module_classes()
-    module.set_module_functions()
-    module.set_module_constants()
     module.set_module_imports()
+    module.set_module_classes()
+    module.set_module_functions(with_async=not is_visiting_cython)
+
+    # cython constants are not currently supported
+    if not is_visiting_cython:
+        module.set_module_constants()
+
     return module
