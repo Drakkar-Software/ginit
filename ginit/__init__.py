@@ -27,6 +27,9 @@ FOLDERS_TO_IGNORE = ['__pycache__']
 FUNCTIONS_TO_IGNORE = ['__init__', '__str__', '__repr__', '__del__']
 DIRECTORY_MODULES = "."
 INIT_SEPARATOR = ", "
+IMPORT_MODULE_SEPARATOR = "."
+
+DEFAULT_IMPORT_PATCH_MAX_DEPTH = 2
 
 PYTHON_IMPORT = "import"
 PYTHON_INIT = "__init__.py"
@@ -40,5 +43,6 @@ __all__ = ['__project__', '__version__',
            'ModuleVisitor', 'visit_path',
            'get_python_path_from_path', 'drop_file_extension',
            'DIRECTORY_MODULES', 'FILE_TO_IGNORE', 'FOLDERS_TO_IGNORE', 'PATCHER_FILES_TO_IGNORE',
+           'DEFAULT_IMPORT_PATCH_MAX_DEPTH', 'IMPORT_MODULE_SEPARATOR',
            'PYTHON_INIT', 'PYTHON_IMPORT', 'PYTHON_EXTS',
            'CYTHON_INIT', 'CYTHON_IMPORT', 'CYTHON_EXTS']

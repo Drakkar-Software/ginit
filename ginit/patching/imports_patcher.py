@@ -9,6 +9,7 @@
 #  copies of the Software, and to permit persons to whom the Software is
 #  furnished to do so.
 import fileinput
+import os
 import re
 
 import sys
@@ -60,7 +61,7 @@ def _patch_module_import_from(module: ginit.ModuleVisitor,
         if _is_line_from_candidate(line, from_imports=from_imports, import_str=import_str):
             import_search = re.search(rf"from\s(.*){import_str}", line)
             if import_search:
-                line = get_patched_import(import_search.group(1), import_str)
+                line = f"{get_patched_import(import_search.group(1), import_str)}{os.linesep}"
         sys.stdout.write(line)
 
 
@@ -80,12 +81,22 @@ def _is_line_from_candidate(line: str, from_imports: list, import_str: str) -> b
     return False
 
 
-def get_patched_import(import_package: str, import_str: str) -> str:
+def get_patched_import(import_package: str,
+                       import_str: str,
+                       import_separator: str = ginit.IMPORT_MODULE_SEPARATOR,
+                       max_depth: int = ginit.DEFAULT_IMPORT_PATCH_MAX_DEPTH) -> str:
     """
     :param import_package: the original imported package
     :param import_str: the import string
+    :param import_separator: the import module separator
+    :param max_depth: the max subpackage level
     :return: the patched from import package
     """
-    package_names = import_package.split('.')
-    imported_modules = f"as {import_package.split('.')[-1]}" if len(package_names) > 1 else ""
-    return f"{import_str} {import_package}{imported_modules}"
+    package_names = import_package.split(import_separator)
+    if len(package_names) <= 1:
+        imported_modules = ""
+    else:
+        imported_modules = f"as {package_names[-1] if len(package_names) == max_depth else package_names[max_depth]}"
+        if not imported_modules.startswith(" "):
+            imported_modules = f" {imported_modules}"
+    return f"{import_str} {import_separator.join(package_names[:max_depth])}{imported_modules}"
