@@ -33,6 +33,10 @@ def main():
                         help='Patch imports of python files at path',
                         default=False)
 
+    parser.add_argument('-l', '--list_cython_modules', action='store_true',
+                        help='List project cython modules',
+                        default=False)
+
     parser.add_argument('-cpi', '--convert_python_init', action='store_true',
                         help='Convert python init files to cython init files',
                         default=False)
@@ -45,6 +49,9 @@ def main():
 
     if args.convert_python_init:
         generation.migrate_python_init_to_cython(args.path)
+    elif args.list_cython_modules:
+        import black
+        print(black.format_str(str(generation.list_cython_modules(args.path)), mode=black.Mode()))
     elif args.patch and args.cython:
         patching.imports_regex_patcher(args.path, is_cython_path=args.cython)
     else:

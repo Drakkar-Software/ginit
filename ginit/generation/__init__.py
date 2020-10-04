@@ -11,8 +11,14 @@
 
 from ginit.generation import init_generator
 from ginit.generation import init_conversion
+from ginit.generation import setup_cython_package_list
 
 from ginit.generation.init_generator import (gen_python_init_from_visit, gen_python_init,)
 from ginit.generation.init_conversion import (migrate_python_init_to_cython,)
+from ginit.generation.setup_cython_package_list import (list_cython_modules,)
 
-__all__ = ['gen_python_init_from_visit', 'gen_python_init', 'migrate_python_init_to_cython']
+__all__ = ['gen_python_init_from_visit',
+           'gen_python_init',
+           'migrate_python_init_to_cython',
+           'list_cython_modules',
+]

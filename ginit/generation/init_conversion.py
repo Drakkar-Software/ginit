@@ -20,7 +20,7 @@ def migrate_python_init_to_cython(path: str) -> None:
     """
     for (current_path, directory_names, filenames) in os.walk(path):
         for file in filenames:
-            if file == ginit.PYTHON_INIT and os.path.exists(os.path.join(current_path, ginit.CYTHON_INIT)):
+            if file == ginit.PYTHON_INIT:
                 convert_python_file(current_path)
 
 
