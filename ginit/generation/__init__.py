@@ -10,7 +10,9 @@
 #  furnished to do so.
 
 from ginit.generation import init_generator
+from ginit.generation import init_conversion
 
 from ginit.generation.init_generator import (gen_python_init_from_visit, gen_python_init,)
+from ginit.generation.init_conversion import (migrate_python_init_to_cython,)
 
-__all__ = ['gen_python_init_from_visit', 'gen_python_init']
+__all__ = ['gen_python_init_from_visit', 'gen_python_init', 'migrate_python_init_to_cython']

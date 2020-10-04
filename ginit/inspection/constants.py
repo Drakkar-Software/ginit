@@ -17,4 +17,12 @@ def parse_constants(code: Union[ast.Module, ast.AST]) -> list:
     :param code: the module code
     :return: the list of module constants
     """
-    return [node for node in ast.walk(code) if isinstance(node, ast.Name) and node.id.isupper()]
+    return [node for node in ast.walk(code) if isinstance(node, ast.Name) and is_string_constant(node.id)]
+
+
+def is_string_constant(string_to_test: str) -> bool:
+    """
+    :param string_to_test: the string to test
+    :return: True if the string is a constant
+    """
+    return string_to_test.isupper()

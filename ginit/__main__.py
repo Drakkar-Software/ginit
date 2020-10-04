@@ -32,14 +32,20 @@ def main():
     parser.add_argument('-p', '--patch', action='store_true',
                         help='Patch imports of python files at path',
                         default=False)
+
+    parser.add_argument('-cpi', '--convert_python_init', action='store_true',
+                        help='Convert python init files to cython init files',
+                        default=False)
     args, unknown = parser.parse_known_args()
 
     logging.basicConfig(
         format='%(levelname)s: %(message)s',
         level=logging.INFO,
     )
-    
-    if args.patch and args.cython:
+
+    if args.convert_python_init:
+        generation.migrate_python_init_to_cython(args.path)
+    elif args.patch and args.cython:
         patching.imports_regex_patcher(args.path, is_cython_path=args.cython)
     else:
         visit_result = visitor.visit_path(args.path,

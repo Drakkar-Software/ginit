@@ -19,9 +19,9 @@ from ginit.inspection.module import (get_code,)
 from ginit.inspection.imports import (parse_imports, parse_imports_from)
 from ginit.inspection.classes import (parse_classes, parse_class_methods, parse_class_constants)
 from ginit.inspection.functions import (parse_functions,)
-from ginit.inspection.constants import (parse_constants,)
+from ginit.inspection.constants import (parse_constants, is_string_constant)
 
 __all__ = ['get_code',
            'parse_imports', 'parse_imports_from',
            'parse_classes', 'parse_class_methods', 'parse_class_constants',
-           'parse_functions', 'parse_constants']
+           'parse_functions', 'parse_constants', 'is_string_constant']
